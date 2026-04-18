@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
@@ -20,8 +19,6 @@ import { Label } from '@/components/ui/Label'
 import { toast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { UsernameValidator } from '@/lib/validators/username'
-import { useMutation } from '@tanstack/react-query'
-import axios, { AxiosError } from 'axios'
 
 interface UserNameFormProps extends React.HTMLAttributes<HTMLFormElement> {
   user: { id: string; username: string | null }
@@ -30,7 +27,6 @@ interface UserNameFormProps extends React.HTMLAttributes<HTMLFormElement> {
 type FormData = z.infer<typeof UsernameValidator>
 
 export function UserNameForm({ user, className, ...props }: UserNameFormProps) {
-  const router = useRouter()
   const {
     handleSubmit,
     register,
@@ -42,37 +38,13 @@ export function UserNameForm({ user, className, ...props }: UserNameFormProps) {
     },
   })
 
-  const { mutate: updateUsername, isLoading } = useMutation({
-    mutationFn: async ({ name }: FormData) => {
-      const payload: FormData = { name }
-
-      const { data } = await axios.patch(`/api/username/`, payload)
-      return data
-    },
-    onError: (err) => {
-      if (err instanceof AxiosError) {
-        if (err.response?.status === 409) {
-          return toast({
-            title: 'Username already taken.',
-            description: 'Please choose another username.',
-            variant: 'destructive',
-          })
-        }
-      }
-
-      return toast({
-        title: 'Something went wrong.',
-        description: 'Your username was not updated. Please try again.',
-        variant: 'destructive',
-      })
-    },
-    onSuccess: () => {
-      toast({
-        description: 'Your username has been updated.',
-      })
-      router.refresh()
-    },
-  })
+  const updateUsername = (_data: FormData) => {
+    toast({
+      title: 'Shell mode',
+      description:
+        'Username updates are not available in the UI shell. No backend is connected.',
+    })
+  }
 
   return (
     <form
@@ -106,7 +78,7 @@ export function UserNameForm({ user, className, ...props }: UserNameFormProps) {
           </div>
         </CardContent>
         <CardFooter>
-          <Button isLoading={isLoading}>Change name</Button>
+          <Button disabled>Change name (disabled in shell)</Button>
         </CardFooter>
       </Card>
     </form>

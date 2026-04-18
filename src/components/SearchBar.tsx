@@ -1,10 +1,7 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
-import debounce from 'lodash.debounce'
 import { usePathname, useRouter } from 'next/navigation'
-import { FC, useCallback, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 
 interface SearchResult {
   id: string
@@ -25,6 +22,9 @@ import { Users } from 'lucide-react'
 
 interface SearchBarProps {}
 
+// Local shell-mode mock data (no backend)
+const MOCK_COMMUNITIES: SearchResult[] = []
+
 const SearchBar: FC<SearchBarProps> = ({}) => {
   const [input, setInput] = useState<string>('')
   const pathname = usePathname()
@@ -35,30 +35,11 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
     setInput('')
   })
 
-  const request = debounce(async () => {
-    refetch()
-  }, 300)
-
-  const debounceRequest = useCallback(() => {
-    request()
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  const {
-    isFetching,
-    data: queryResults,
-    refetch,
-    isFetched,
-  } = useQuery({
-    queryFn: async () => {
-      if (!input) return []
-      const { data } = await axios.get(`/api/search?q=${input}`)
-      return data as SearchResult[]
-    },
-    queryKey: ['search-query'],
-    enabled: false,
-  })
+  const queryResults = useMemo<SearchResult[]>(() => {
+    if (!input) return []
+    const q = input.toLowerCase()
+    return MOCK_COMMUNITIES.filter((c) => c.name.toLowerCase().includes(q))
+  }, [input])
 
   useEffect(() => {
     setInput('')
@@ -69,10 +50,8 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
       ref={commandRef}
       className='relative rounded-lg border max-w-lg z-50 overflow-visible'>
       <CommandInput
-        isLoading={isFetching}
         onValueChange={(text) => {
           setInput(text)
-          debounceRequest()
         }}
         value={input}
         className='outline-none border-none focus:border-none focus:outline-none ring-0'
@@ -81,10 +60,10 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
 
       {input.length > 0 && (
         <CommandList className='absolute bg-white top-full inset-x-0 shadow rounded-b-md'>
-          {isFetched && <CommandEmpty>No results found.</CommandEmpty>}
-          {(queryResults?.length ?? 0) > 0 ? (
+          <CommandEmpty>No results found (shell mode).</CommandEmpty>
+          {queryResults.length > 0 ? (
             <CommandGroup heading='Communities'>
-              {queryResults?.map((subreddit) => (
+              {queryResults.map((subreddit) => (
                 <CommandItem
                   onSelect={(e) => {
                     router.push(`/r/${e}`)

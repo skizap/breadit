@@ -2,12 +2,8 @@
 
 import { useOnClickOutside } from '@/hooks/use-on-click-outside'
 import { formatTimeToNow } from '@/lib/utils'
-import { CommentRequest } from '@/lib/validators/comment'
 import type { Comment, User, Vote } from '@/types/db'
-import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
 import { MessageSquare } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import { FC, useRef, useState } from 'react'
 import CommentVotes from '../CommentVotes'
 import { UserAvatar } from '../UserAvatar'
@@ -32,39 +28,22 @@ const PostComment: FC<PostCommentProps> = ({
   comment,
   votesAmt,
   currentVote,
-  postId,
 }) => {
   const [isReplying, setIsReplying] = useState<boolean>(false)
   const commentRef = useRef<HTMLDivElement>(null)
   const [input, setInput] = useState<string>(`@${comment.author.username} `)
-  const router = useRouter()
   useOnClickOutside(commentRef, () => {
     setIsReplying(false)
   })
 
-  const { mutate: postComment, isLoading } = useMutation({
-    mutationFn: async ({ postId, text, replyToId }: CommentRequest) => {
-      const payload: CommentRequest = { postId, text, replyToId }
-
-      const { data } = await axios.patch(
-        `/api/subreddit/post/comment/`,
-        payload
-      )
-      return data
-    },
-
-    onError: () => {
-      return toast({
-        title: 'Something went wrong.',
-        description: "Comment wasn't created successfully. Please try again.",
-        variant: 'destructive',
-      })
-    },
-    onSuccess: () => {
-      router.refresh()
-      setIsReplying(false)
-    },
-  })
+  const postComment = () => {
+    toast({
+      title: 'Shell mode',
+      description:
+        'Replying is not available in the UI shell. No backend is connected.',
+    })
+    setIsReplying(false)
+  }
 
   return (
     <div ref={commentRef} className='flex flex-col'>
@@ -130,16 +109,11 @@ const PostComment: FC<PostCommentProps> = ({
                 Cancel
               </Button>
               <Button
-                isLoading={isLoading}
                 onClick={() => {
                   if (!input) return
-                  postComment({
-                    postId,
-                    text: input,
-                    replyToId: comment.replyToId ?? comment.id, // default to top-level comment
-                  })
+                  postComment()
                 }}>
-                Post
+                Post (shell)
               </Button>
             </div>
           </div>

@@ -2,7 +2,6 @@
 
 import EditorJS from '@editorjs/editorjs'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import TextareaAutosize from 'react-textarea-autosize'
@@ -10,8 +9,6 @@ import { z } from 'zod'
 
 import { toast } from '@/hooks/use-toast'
 import { PostCreationRequest, PostValidator } from '@/lib/validators/post'
-import { useMutation } from '@tanstack/react-query'
-import axios from 'axios'
 
 import '@/styles/editor.css'
 
@@ -36,39 +33,15 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
   })
   const ref = useRef<EditorJS>()
   const _titleRef = useRef<HTMLTextAreaElement>(null)
-  const router = useRouter()
   const [isMounted, setIsMounted] = useState<boolean>(false)
-  const pathname = usePathname()
 
-  const { mutate: createPost } = useMutation({
-    mutationFn: async ({
-      title,
-      content,
-      subredditId,
-    }: PostCreationRequest) => {
-      const payload: PostCreationRequest = { title, content, subredditId }
-      const { data } = await axios.post('/api/subreddit/post/create', payload)
-      return data
-    },
-    onError: () => {
-      return toast({
-        title: 'Something went wrong.',
-        description: 'Your post was not published. Please try again.',
-        variant: 'destructive',
-      })
-    },
-    onSuccess: () => {
-      // turn pathname /r/mycommunity/submit into /r/mycommunity
-      const newPathname = pathname.split('/').slice(0, -1).join('/')
-      router.push(newPathname)
-
-      router.refresh()
-
-      return toast({
-        description: 'Your post has been published.',
-      })
-    },
-  })
+  const createPost = (_payload: PostCreationRequest) => {
+    toast({
+      title: 'Shell mode',
+      description:
+        'Publishing is not available in the UI shell. No backend is connected.',
+    })
+  }
 
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import('@editorjs/editorjs')).default
@@ -94,9 +67,6 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
           header: Header,
           linkTool: {
             class: LinkTool,
-            config: {
-              endpoint: '/api/link',
-            },
           },
           image: {
             class: ImageTool,
