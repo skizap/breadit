@@ -1,11 +1,16 @@
 'use client'
 
-import { Prisma, Subreddit } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import debounce from 'lodash.debounce'
 import { usePathname, useRouter } from 'next/navigation'
 import { FC, useCallback, useEffect, useRef, useState } from 'react'
+
+interface SearchResult {
+  id: string
+  name: string
+  _count: { posts: number }
+}
 
 import {
   Command,
@@ -49,9 +54,7 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
     queryFn: async () => {
       if (!input) return []
       const { data } = await axios.get(`/api/search?q=${input}`)
-      return data as (Subreddit & {
-        _count: Prisma.SubredditCountOutputType
-      })[]
+      return data as SearchResult[]
     },
     queryKey: ['search-query'],
     enabled: false,

@@ -3,8 +3,9 @@
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { PostVoteRequest } from '@/lib/validators/vote'
 import { usePrevious } from '@mantine/hooks'
-import { VoteType } from '@prisma/client'
 import { useMutation } from '@tanstack/react-query'
+
+type VoteType = 'UP' | 'DOWN'
 import axios, { AxiosError } from 'axios'
 import { useEffect, useState } from 'react'
 import { toast } from '../../hooks/use-toast'

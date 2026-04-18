@@ -1,45 +1,24 @@
-import { getAuthSession } from '@/lib/auth'
-import { db } from '@/lib/db'
-import { Comment, CommentVote, User } from '@prisma/client'
+import type { Comment, User, Vote } from '@/types/db'
 import CreateComment from './CreateComment'
 import PostComment from './comments/PostComment'
 
 type ExtendedComment = Comment & {
-  votes: CommentVote[]
+  votes: Vote[]
   author: User
   replies: ReplyComment[]
 }
 
 type ReplyComment = Comment & {
-  votes: CommentVote[]
+  votes: Vote[]
   author: User
 }
 
 interface CommentsSectionProps {
   postId: string
-  comments: ExtendedComment[]
 }
 
-const CommentsSection = async ({ postId }: CommentsSectionProps) => {
-  const session = await getAuthSession()
-
-  const comments = await db.comment.findMany({
-    where: {
-      postId: postId,
-      replyToId: null, // only fetch top-level comments
-    },
-    include: {
-      author: true,
-      votes: true,
-      replies: {
-        // first level replies
-        include: {
-          author: true,
-          votes: true,
-        },
-      },
-    },
-  })
+const CommentsSection = ({ postId }: CommentsSectionProps) => {
+  const comments: ExtendedComment[] = []
 
   return (
     <div className='flex flex-col gap-y-4 mt-4'>
@@ -60,16 +39,12 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
               0
             )
 
-            const topLevelCommentVote = topLevelComment.votes.find(
-              (vote) => vote.userId === session?.user.id
-            )
-
             return (
               <div key={topLevelComment.id} className='flex flex-col'>
                 <div className='mb-2'>
                   <PostComment
                     comment={topLevelComment}
-                    currentVote={topLevelCommentVote}
+                    currentVote={undefined}
                     votesAmt={topLevelCommentVotesAmt}
                     postId={postId}
                   />
@@ -85,17 +60,13 @@ const CommentsSection = async ({ postId }: CommentsSectionProps) => {
                       return acc
                     }, 0)
 
-                    const replyVote = reply.votes.find(
-                      (vote) => vote.userId === session?.user.id
-                    )
-
                     return (
                       <div
                         key={reply.id}
                         className='ml-2 py-2 pl-4 border-l-2 border-zinc-200'>
                         <PostComment
                           comment={reply}
-                          currentVote={replyVote}
+                          currentVote={undefined}
                           votesAmt={replyVotesAmt}
                           postId={postId}
                         />

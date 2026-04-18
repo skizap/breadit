@@ -5,11 +5,12 @@ import { Input } from '@/components/ui/Input'
 import { Image as ImageIcon, Link2 } from 'lucide-react'
 import { FC } from 'react'
 import { UserAvatar } from './UserAvatar'
-import type { Session } from 'next-auth'
 import { usePathname, useRouter } from 'next/navigation'
 
 interface MiniCreatePostProps {
-  session: Session | null
+  session: {
+    user: { name?: string | null; image?: string | null }
+  } | null
 }
 
 const MiniCreatePost: FC<MiniCreatePostProps> = ({ session }) => {

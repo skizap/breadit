@@ -1,7 +1,6 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { signIn } from 'next-auth/react'
 import * as React from 'react'
 import { FC } from 'react'
 import { Button } from '@/components/ui/Button'
@@ -16,18 +15,12 @@ const UserAuthForm: FC<UserAuthFormProps> = ({ className, ...props }) => {
 
   const loginWithGoogle = async () => {
     setIsLoading(true)
-
-    try {
-      await signIn('google')
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'There was an error logging in with Google',
-        variant: 'destructive',
-      })
-    } finally {
-      setIsLoading(false)
-    }
+    toast({
+      title: 'Not available',
+      description: 'Auth is not available in this shell.',
+      variant: 'destructive',
+    })
+    setIsLoading(false)
   }
 
   return (

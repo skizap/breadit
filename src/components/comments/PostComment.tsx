@@ -3,7 +3,7 @@
 import { useOnClickOutside } from '@/hooks/use-on-click-outside'
 import { formatTimeToNow } from '@/lib/utils'
 import { CommentRequest } from '@/lib/validators/comment'
-import { Comment, CommentVote, User } from '@prisma/client'
+import type { Comment, User, Vote } from '@/types/db'
 import { useMutation } from '@tanstack/react-query'
 import axios from 'axios'
 import { MessageSquare } from 'lucide-react'
@@ -15,17 +15,16 @@ import { Button } from '../ui/Button'
 import { Label } from '../ui/Label'
 import { Textarea } from '../ui/Textarea'
 import { toast } from '../../hooks/use-toast'
-import { useSession } from 'next-auth/react'
 
 type ExtendedComment = Comment & {
-  votes: CommentVote[]
+  votes: Vote[]
   author: User
 }
 
 interface PostCommentProps {
   comment: ExtendedComment
   votesAmt: number
-  currentVote: CommentVote | undefined
+  currentVote: Pick<Vote, 'type'> | undefined
   postId: string
 }
 
@@ -35,7 +34,6 @@ const PostComment: FC<PostCommentProps> = ({
   currentVote,
   postId,
 }) => {
-  const { data: session } = useSession()
   const [isReplying, setIsReplying] = useState<boolean>(false)
   const commentRef = useRef<HTMLDivElement>(null)
   const [input, setInput] = useState<string>(`@${comment.author.username} `)
@@ -97,10 +95,7 @@ const PostComment: FC<PostCommentProps> = ({
         />
 
         <Button
-          onClick={() => {
-            if (!session) return router.push('/sign-in')
-            setIsReplying(true)
-          }}
+          onClick={() => setIsReplying(true)}
           variant='ghost'
           size='xs'>
           <MessageSquare className='h-4 w-4 mr-1.5' />

@@ -1,7 +1,6 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import * as React from 'react'
 import { useForm } from 'react-hook-form'
@@ -25,7 +24,7 @@ import { useMutation } from '@tanstack/react-query'
 import axios, { AxiosError } from 'axios'
 
 interface UserNameFormProps extends React.HTMLAttributes<HTMLFormElement> {
-  user: Pick<User, 'id' | 'username'>
+  user: { id: string; username: string | null }
 }
 
 type FormData = z.infer<typeof UsernameValidator>
