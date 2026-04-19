@@ -2,7 +2,7 @@
 
 import CustomCodeRenderer from '@/components/renderers/CustomCodeRenderer'
 import CustomImageRenderer from '@/components/renderers/CustomImageRenderer'
-import { FC } from 'react'
+import type { FC } from 'react'
 import dynamic from 'next/dynamic'
 
 const Output = dynamic(
@@ -28,7 +28,6 @@ const style = {
 
 const EditorOutput: FC<EditorOutputProps> = ({ content }) => {
   return (
-    // @ts-expect-error
     <Output
       style={style}
       className='text-sm'

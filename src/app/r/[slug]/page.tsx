@@ -2,13 +2,11 @@ import MiniCreatePost from '@/components/MiniCreatePost'
 import PostFeed from '@/components/PostFeed'
 
 interface PageProps {
-  params: {
-    slug: string
-  }
+  params: Promise<{ slug: string }>
 }
 
-const page = ({ params }: PageProps) => {
-  const { slug } = params
+const page = async ({ params }: PageProps) => {
+  const { slug } = await params
 
   return (
     <>

@@ -8,7 +8,8 @@ import TextareaAutosize from 'react-textarea-autosize'
 import { z } from 'zod'
 
 import { toast } from '@/hooks/use-toast'
-import { PostCreationRequest, PostValidator } from '@/lib/validators/post'
+import type { PostCreationRequest } from '@/lib/validators/post'
+import { PostValidator } from '@/lib/validators/post'
 
 import '@/styles/editor.css'
 
@@ -31,7 +32,7 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
       content: null,
     },
   })
-  const ref = useRef<EditorJS>()
+  const ref = useRef<EditorJS | null>(null)
   const _titleRef = useRef<HTMLTextAreaElement>(null)
   const [isMounted, setIsMounted] = useState<boolean>(false)
 
@@ -124,7 +125,7 @@ export const Editor: React.FC<EditorProps> = ({ subredditId }) => {
 
       return () => {
         ref.current?.destroy()
-        ref.current = undefined
+        ref.current = null
       }
     }
   }, [isMounted, initializeEditor])

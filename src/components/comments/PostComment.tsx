@@ -4,7 +4,7 @@ import { useOnClickOutside } from '@/hooks/use-on-click-outside'
 import { formatTimeToNow } from '@/lib/utils'
 import type { Comment, User, Vote } from '@/types/db'
 import { MessageSquare } from 'lucide-react'
-import { FC, useRef, useState } from 'react'
+import { type FC, useRef, useState } from 'react'
 import CommentVotes from '../CommentVotes'
 import { UserAvatar } from '../UserAvatar'
 import { Button } from '../ui/Button'
@@ -30,7 +30,7 @@ const PostComment: FC<PostCommentProps> = ({
   currentVote,
 }) => {
   const [isReplying, setIsReplying] = useState<boolean>(false)
-  const commentRef = useRef<HTMLDivElement>(null)
+  const commentRef = useRef<HTMLDivElement>(null!)
   const [input, setInput] = useState<string>(`@${comment.author.username} `)
   useOnClickOutside(commentRef, () => {
     setIsReplying(false)

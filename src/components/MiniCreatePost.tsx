@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Image as ImageIcon, Link2 } from 'lucide-react'
-import { FC } from 'react'
+import type { FC } from 'react'
 import { UserAvatar } from './UserAvatar'
 import { usePathname, useRouter } from 'next/navigation'
 

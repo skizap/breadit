@@ -4,14 +4,15 @@ import PostVoteClient from '@/components/post-vote/PostVoteClient'
 import { formatTimeToNow } from '@/lib/utils'
 
 interface SubRedditPostPageProps {
-  params: {
+  params: Promise<{
     postId: string
-  }
+  }>
 }
 
-const SubRedditPostPage = ({ params }: SubRedditPostPageProps) => {
+const SubRedditPostPage = async ({ params }: SubRedditPostPageProps) => {
+  const { postId } = await params
   const post = {
-    id: params.postId,
+    id: postId,
     title: 'Static post',
     content: {
       time: 0,

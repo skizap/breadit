@@ -4,7 +4,7 @@ import { formatTimeToNow } from '@/lib/utils'
 import type { Post, User, Vote } from '@/types/db'
 import { MessageSquare } from 'lucide-react'
 import Link from 'next/link'
-import { FC, useRef } from 'react'
+import { type FC, useRef } from 'react'
 import EditorOutput from './EditorOutput'
 import PostVoteClient from './post-vote/PostVoteClient'
 

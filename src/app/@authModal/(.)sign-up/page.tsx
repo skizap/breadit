@@ -1,6 +1,6 @@
 import CloseModal from '@/components/CloseModal'
 import SignUp from '@/components/SignUp'
-import { FC } from 'react'
+import type { FC } from 'react'
 
 interface pageProps {}
 

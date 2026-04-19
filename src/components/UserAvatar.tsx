@@ -1,4 +1,4 @@
-import { AvatarProps } from '@radix-ui/react-avatar'
+import type { AvatarProps } from '@radix-ui/react-avatar'
 
 import { Icons } from '@/components/Icons'
 import { Avatar, AvatarFallback } from '@/components/ui/Avatar'

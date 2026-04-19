@@ -2,12 +2,12 @@ import { Editor } from '@/components/Editor'
 import { Button } from '@/components/ui/Button'
 
 interface pageProps {
-  params: {
-    slug: string
-  }
+  params: Promise<{ slug: string }>
 }
 
-const page = ({ params }: pageProps) => {
+const page = async ({ params }: pageProps) => {
+  const { slug } = await params
+
   return (
     <div className='flex flex-col items-start gap-6'>
       {/* heading */}
@@ -17,7 +17,7 @@ const page = ({ params }: pageProps) => {
             Create Post
           </h3>
           <p className='ml-2 mt-1 truncate text-sm text-gray-500'>
-            in r/{params.slug}
+            in r/{slug}
           </p>
         </div>
       </div>

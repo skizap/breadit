@@ -1,7 +1,7 @@
 'use client'
 
-import { ExtendedPost } from '@/types/db'
-import { FC } from 'react'
+import type { ExtendedPost } from '@/types/db'
+import type { FC } from 'react'
 import Post from './Post'
 
 interface PostFeedProps {

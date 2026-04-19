@@ -1,7 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { FC, useEffect, useMemo, useRef, useState } from 'react'
+import { type FC, useEffect, useMemo, useRef, useState } from 'react'
 
 interface SearchResult {
   id: string
@@ -28,7 +28,7 @@ const MOCK_COMMUNITIES: SearchResult[] = []
 const SearchBar: FC<SearchBarProps> = ({}) => {
   const [input, setInput] = useState<string>('')
   const pathname = usePathname()
-  const commandRef = useRef<HTMLDivElement>(null)
+  const commandRef = useRef<HTMLDivElement>(null!)
   const router = useRouter()
 
   useOnClickOutside(commandRef, () => {
@@ -50,6 +50,7 @@ const SearchBar: FC<SearchBarProps> = ({}) => {
       ref={commandRef}
       className='relative rounded-lg border max-w-lg z-50 overflow-visible'>
       <CommandInput
+        isLoading={false}
         onValueChange={(text) => {
           setInput(text)
         }}

@@ -4,20 +4,21 @@ import { buttonVariants } from '@/components/ui/Button'
 import { format } from 'date-fns'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 export const metadata: Metadata = {
   title: 'Breadit',
   description: 'A Reddit clone built with Next.js and TypeScript.',
 }
 
-const Layout = ({
+const Layout = async ({
   children,
-  params: { slug },
+  params,
 }: {
   children: ReactNode
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) => {
+  const { slug } = await params
   const subredditName = slug
   const subredditId = 'mock-subreddit-id'
   const createdAt = new Date()

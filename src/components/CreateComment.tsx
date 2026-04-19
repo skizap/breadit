@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/Button'
 import { toast } from '@/hooks/use-toast'
-import { FC, useState } from 'react'
+import { type FC, useState } from 'react'
 import { Label } from '@/components/ui/Label'
 import { Textarea } from '@/components/ui/Textarea'
 

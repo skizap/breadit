@@ -1,15 +1,16 @@
 'use client'
 
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query'
-import { FC, ReactNode } from 'react'
+import { useState } from 'react'
+import type { FC, ReactNode } from 'react'
 
 interface LayoutProps {
   children: ReactNode
 }
 
-const queryClient = new QueryClient()
-
 const Providers: FC<LayoutProps> = ({ children }) => {
+  const [queryClient] = useState(() => new QueryClient())
+
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   )

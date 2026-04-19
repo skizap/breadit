@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import type { Vote } from '@/types/db'
 import { ArrowBigDown, ArrowBigUp } from 'lucide-react'
-import { FC, useState } from 'react'
+import { type FC, useState } from 'react'
 
 type VoteType = 'UP' | 'DOWN'
 

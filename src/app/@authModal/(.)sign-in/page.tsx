@@ -1,6 +1,6 @@
 import CloseModal from '@/components/CloseModal'
 import SignIn from '@/components/SignIn'
-import { FC } from 'react'
+import type { FC } from 'react'
 
 const page: FC = () => {
   return (
